@@ -1,0 +1,17 @@
+export const homepage = "/";
+export const login = "/login";
+export const home = "/home";
+export const profile = "profile";
+export const personal = "personal";
+export const allusers = "allusers";
+export const negusers = "negusers";
+export const deposits = "deposits";
+export const withdrawals = "withdrawals";
+export const hold = "hold";
+export const packs = "packs";
+export const events = "events";
+export const logs = "logs";
+export const settings = "settings";
+export const video = "video";
+export const notifications = "notifications";
+export const products = "products";
