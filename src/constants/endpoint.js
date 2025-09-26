@@ -51,6 +51,7 @@ export const ENDPOINT = {
 	POST_USER_ACTIVE: "/site_admin/users/toggle_user_active/",
 	POST_UPDATE_CREDIT_SCORE: "/site_admin/users/update_credit_score/",
 	POST_REST_ACCOUNT_FOR_TASK: "/site_admin/users/reset_user_account/",
+	DELETE_USER: "/site_admin/users/delete-user/",
 
 	// Negative Users
 	GET_NEGATIVE_USERS: "/site_admin/negative-users/",

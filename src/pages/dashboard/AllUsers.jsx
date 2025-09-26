@@ -34,6 +34,7 @@ import { toast } from "sonner";
 import { usePostRequestMutation } from "../../services/api/request";
 import { ENDPOINT } from "../../constants/endpoint";
 import { invalidateRequestTag } from "../../services/api/invalidate-request-tag";
+import { requestApi } from "../../services/api/request";
 import { Loading } from "../../components/loading";
 import { Error } from "../../components/error";
 import { BiCopy } from "react-icons/bi";
@@ -59,6 +60,13 @@ const AllUsers = () => {
 	const { users, refetchUsers } = useAllUsers();
 
 	const [tableData, setTableData] = useState([]);
+
+	// Force fresh data on component mount
+	useEffect(() => {
+		// Reset API state to ensure fresh data
+		requestApi.util.resetApiState();
+		refetchUsers();
+	}, []);
 
 	useEffect(() => {
 		if (users?.data) {
@@ -467,6 +475,60 @@ const AllUsers = () => {
 
 	const handleCloseDeactivateBalanceModal = () => {
 		setIsDeactivateBalanceModalOpen(false);
+	};
+
+	// Delete User Modal
+	const [isDeleteUserModalOpen, setIsDeleteUserModalOpen] = useState(false);
+	const [deletePassword, setDeletePassword] = useState("");
+	const [deleteReason, setDeleteReason] = useState("");
+
+	const handleOpenDeleteUserModal = (row) => {
+		setSelectedRow(row);
+		setIsDeleteUserModalOpen(true);
+		setDeletePassword("");
+		setDeleteReason("");
+	};
+
+	const handleCloseDeleteUserModal = () => {
+		setIsDeleteUserModalOpen(false);
+		setDeletePassword("");
+		setDeleteReason("");
+	};
+
+	// Delete User API
+	const [postDeleteUser, { isLoading: loadingDeleteUser }] = usePostRequestMutation();
+	const handleDeleteUser = async () => {
+		if (!deletePassword) {
+			toast.error("Admin password is required");
+			return;
+		}
+
+		try {
+			const res = await postDeleteUser({
+				url: ENDPOINT.DELETE_USER,
+				body: {
+					user: selectedRow.id,
+					admin_password: deletePassword,
+					reason: deleteReason || "No reason provided"
+				}
+			}).unwrap();
+
+			toast.success("User deleted successfully");
+			
+			// Remove user from local state immediately
+			setTableData(prevData => 
+				prevData.filter(user => user.id !== selectedRow.id)
+			);
+			
+			// Reset API state and refetch data for fresh data
+			requestApi.util.resetApiState();
+			refetchUsers();
+			
+			handleCloseDeleteUserModal();
+		} catch (error) {
+			// The transformErrorResponse will handle the error display
+			console.error("Delete user error:", error);
+		}
 	};
 
 	const handleExportPDF = () => {
@@ -1142,6 +1204,15 @@ const AllUsers = () => {
 															? "Enable"
 															: "Disable"}{" "}
 														minimum balance for submissions
+													</MenuItem>
+
+													<MenuItem
+														onClick={() => {
+															handleOpenDeleteUserModal(selectedRow);
+														}}
+														sx={{ color: 'error.main' }}
+													>
+														Delete User
 													</MenuItem>
 												</Menu>
 											</div>
@@ -1853,6 +1924,75 @@ const AllUsers = () => {
 						className="w-full h-full"
 					/>
 				</DialogContent>
+			</Dialog>
+
+			{/* Delete User Modal */}
+			<Dialog
+				open={isDeleteUserModalOpen}
+				onClose={handleCloseDeleteUserModal}
+				fullWidth
+				maxWidth="sm"
+			>
+				<DialogTitle>
+					<span style={{ color: "#1A73E8", fontWeight: "bold" }}>
+						Delete User
+					</span>
+				</DialogTitle>
+				<DialogContent>
+					<div className="space-y-4">
+						<p className="text-red-600 font-semibold">
+							⚠️ Warning: This action cannot be undone!
+						</p>
+						<p>
+							You are about to delete user: <strong>{selectedRow?.username}</strong>
+						</p>
+						<p className="text-gray-600">
+							This will permanently delete the user and all associated data including:
+							<br />• Wallet and balance
+							<br />• All deposits and withdrawals
+							<br />• Game submissions and ratings
+							<br />• Notifications and logs
+						</p>
+						
+						<TextField
+							fullWidth
+							label="Admin Password"
+							type="password"
+							value={deletePassword}
+							onChange={(e) => setDeletePassword(e.target.value)}
+							required
+							margin="normal"
+						/>
+						
+						<TextField
+							fullWidth
+							label="Reason for deletion (optional)"
+							multiline
+							rows={3}
+							value={deleteReason}
+							onChange={(e) => setDeleteReason(e.target.value)}
+							placeholder="Enter reason for deleting this user..."
+							margin="normal"
+						/>
+					</div>
+				</DialogContent>
+				<DialogActions>
+					<Button
+						onClick={handleCloseDeleteUserModal}
+						color="warning"
+						variant="outlined"
+					>
+						Cancel
+					</Button>
+					<Button
+						onClick={handleDeleteUser}
+						disabled={loadingDeleteUser || !deletePassword}
+						color="error"
+						variant="contained"
+					>
+						{loadingDeleteUser ? "Deleting..." : "Delete User"}
+					</Button>
+				</DialogActions>
 			</Dialog>
 		</div>
 	);
