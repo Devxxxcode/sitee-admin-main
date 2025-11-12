@@ -14,6 +14,7 @@ import {
 // );
 
 export const baseServerUrl = "https://ads-backend-4ho2.onrender.com"
+// export const baseServerUrl = "http://127.0.0.1:8000"
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: baseServerUrl,

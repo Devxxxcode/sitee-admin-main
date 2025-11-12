@@ -4,7 +4,7 @@ import { AiFillBook } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { MdOutlineDashboard } from "react-icons/md";
+import { MdOutlineDashboard, MdAnnouncement } from "react-icons/md";
 import { BiUser, BiCog, BiBookOpen } from "react-icons/bi";
 import { AiOutlineLogout, AiOutlineCaretDown } from "react-icons/ai";
 import { FaRegCalendarAlt, FaRegEye, FaVideo } from "react-icons/fa";
@@ -341,6 +341,29 @@ function SideBarWeb({ isCollapsed, closeSidebar }) {
 					{isCollapsed && (
 						<div className="absolute z-20 px-3 py-1 text-sm text-white transition-opacity duration-300 transform -translate-y-1/2 bg-gray-800 rounded-md shadow-md opacity-0 left-full top-1/2 group-hover:opacity-100">
 							Events management
+						</div>
+					)}
+				</div>
+
+				{/* Announcements Management */}
+				<div className="relative group">
+					<NavLink
+						to="/home/announcements"
+						className={({ isActive }) =>
+							isActive
+								? "flex items-center gap-x-3 py-2 px-4 bg-red-600 rounded-md"
+								: "flex items-center gap-x-3 py-2 px-4 hover:bg-red-600 rounded-md"
+						}
+						onClick={closeSidebar} // Close sidebar on click
+					>
+						<MdAnnouncement className="text-xl" />
+						{!isCollapsed && <span>Announcements</span>}
+					</NavLink>
+
+					{/* Tooltip for Collapsed Sidebar */}
+					{isCollapsed && (
+						<div className="absolute z-20 px-3 py-1 text-sm text-white transition-opacity duration-300 transform -translate-y-1/2 bg-gray-800 rounded-md shadow-md opacity-0 left-full top-1/2 group-hover:opacity-100">
+							Announcements
 						</div>
 					)}
 				</div>

@@ -9,6 +9,7 @@ import {
 	hold,
 	packs,
 	events,
+	announcements,
 	logs,
 	settings,
 	video,
@@ -28,6 +29,7 @@ import Withdrawals from "./pages/dashboard/Withdrawals";
 import Hold from "./pages/dashboard/Hold";
 import Packs from "./pages/dashboard/Packs";
 import Events from "./pages/dashboard/Events";
+import Announcements from "./pages/dashboard/Announcements";
 import Logs from "./pages/dashboard/Logs";
 import Settings from "./pages/dashboard/Settings";
 import Video from "./pages/dashboard/Video";
@@ -80,6 +82,7 @@ function App() {
 							<Route path={hold} element={<Hold />} />
 							<Route path={packs} element={<Packs />} />
 							<Route path={events} element={<Events />} />
+							<Route path={announcements} element={<Announcements />} />
 							<Route path={logs} element={<Logs />} />
 							<Route path={settings} element={<Settings />} />
 							<Route path={video} element={<Video />} />

@@ -10,6 +10,7 @@ export const withdrawals = "withdrawals";
 export const hold = "hold";
 export const packs = "packs";
 export const events = "events";
+export const announcements = "announcements";
 export const logs = "logs";
 export const settings = "settings";
 export const video = "video";

@@ -18,6 +18,12 @@ export const ENDPOINT = {
 	PUT_EVENT: "/site_admin/events/:id/",
 	DELETE_EVENT: "/site_admin/events/:id/",
 
+	// ANNOUNCEMENTS
+	GET_ANNOUNCEMENTS: "/site_admin/announcements/",
+	POST_ANNOUNCEMENT: "/site_admin/announcements/",
+	PUT_ANNOUNCEMENT: "/site_admin/announcements/:id/",
+	DELETE_ANNOUNCEMENT: "/site_admin/announcements/:id/",
+
 	//SETTINGS
 	GET_SETTINGS: "/site_admin/settings/",
 	PATCH_SETTINGS: "/site_admin/settings/update-settings/",
